@@ -8,7 +8,6 @@ import {
   Card,
   ListGroup,
   Image,
-  Form,
   FormControl,
 } from 'react-bootstrap'
 import { addToCart } from '../actions/cartActions'
@@ -31,6 +30,10 @@ const CartScreen = ({ match, location, history }) => {
   }, [dispatch, productId, qty])
 
   const removeFromCartHandler = (id) => console.log(id)
+
+  const checkoutHandler = () => {
+    history.push('/login?redirect=shipping')
+  }
 
   return (
     <Row>
@@ -85,8 +88,33 @@ const CartScreen = ({ match, location, history }) => {
           </ListGroup>
         )}
       </Col>
-      <Col md={2}></Col>
-      <Col md={2}></Col>
+      <Col md={4}>
+        <Card>
+          <ListGroup>
+            <ListGroup.Item variant='flush'>
+              <h2>
+                Subtotal ({cartItems.reduce((acc, item) => acc + item.qty, 0)})
+                items
+              </h2>
+              ${' '}
+              {cartItems
+                .reduce((acc, item) => acc + item.qty * item.price, 0)
+                .toFixed(2)}
+            </ListGroup.Item>
+
+            <ListGroup.Item>
+              <Button
+                type='button'
+                className='btn-block'
+                onClick={checkoutHandler}
+                disabled={cartItems.length === 0}
+              >
+                Proceed To Checkout
+              </Button>
+            </ListGroup.Item>
+          </ListGroup>
+        </Card>
+      </Col>
     </Row>
   )
 }
